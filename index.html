@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>DungeonCrawl</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="game-header">
+        <h1 class="game-title">DungeonCrawl</h1>
+    </header>
+    
+    <div class="game-container">
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-label">Health:</span>
+                <span id="health-value">20/20</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Level:</span>
+                <span id="level-value">1</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Gold:</span>
+                <span id="gold-value">0</span>
+            </div>
+        </div>
+
+        <div class="board-wrapper">
+            <div id="game-board"></div>
+        </div>
+
+        <div class="game-message" id="game-message">
+            Welcome to the dungeon! Use arrow keys or buttons to move.
+        </div>
+
+        <div class="control-buttons">
+            <div class="movement-buttons">
+                <button id="move-up" class="movement-button">↑</button>
+                <div class="horizontal-buttons">
+                    <button id="move-left" class="movement-button">←</button>
+                    <button id="move-right" class="movement-button">→</button>
+                </div>
+                <button id="move-down" class="movement-button">↓</button>
+            </div>
+            <div class="action-buttons">
+                <button id="attack-button" class="control-button">Attack</button>
+                <button id="new-game-button" class="control-button">New Game</button>
+            </div>
+        </div>
+    </div>  
+
+    <footer class="game-footer">
+        <p>Use arrow keys to move or touch controls on mobile.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
