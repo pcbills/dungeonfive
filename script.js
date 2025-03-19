@@ -450,16 +450,31 @@ function renderGameBoard() {
     gameBoard.style.gridTemplateColumns = `repeat(${config.boardSize}, 1fr)`;
     gameBoard.style.gridTemplateRows = `repeat(${config.boardSize}, 1fr)`;
     
-    // Create cells
-    for (let y = 0; y < config.boardSize; y++) {
-        for (let x = 0; x < config.boardSize; x++) {
+    // Calculate viewport - always keep player centered
+    const viewportWidth = 10; // Number of cells visible horizontally
+    const viewportHeight = 10; // Number of cells visible vertically
+    
+    // Calculate camera position (centered on player)
+    const cameraX = Math.max(0, Math.min(gameState.player.x - Math.floor(viewportWidth / 2), config.boardSize - viewportWidth));
+    const cameraY = Math.max(0, Math.min(gameState.player.y - Math.floor(viewportHeight / 2), config.boardSize - viewportHeight));
+    
+    // Create cells for the visible area only
+    for (let viewY = 0; viewY < viewportHeight; viewY++) {
+        for (let viewX = 0; viewX < viewportWidth; viewX++) {
+            // Convert viewport coordinates to world coordinates
+            const worldX = viewX + cameraX;
+            const worldY = viewY + cameraY;
+            
+            // Skip if outside dungeon bounds
+            if (worldX >= config.boardSize || worldY >= config.boardSize) continue;
+            
             const cell = document.createElement('div');
             cell.className = 'cell';
-            cell.dataset.x = x;
-            cell.dataset.y = y;
+            cell.dataset.x = worldX;
+            cell.dataset.y = worldY;
             
             // Determine cell content
-            const cellType = gameState.dungeon[y][x];
+            const cellType = gameState.dungeon[worldY][worldX];
             cell.classList.add(cellType);
             
             // Add cell image based on type
@@ -475,8 +490,12 @@ function renderGameBoard() {
         }
     }
     
-    // Render entities
+    // Render entities that are in the viewport
     for (const entity of gameState.entities) {
+        // Skip entities outside viewport
+        if (entity.x < cameraX || entity.x >= cameraX + viewportWidth ||
+            entity.y < cameraY || entity.y >= cameraY + viewportHeight) continue;
+            
         const cell = document.querySelector(`.cell[data-x="${entity.x}"][data-y="${entity.y}"]`);
         if (cell) {
             cell.classList.add(entity.type);
@@ -490,7 +509,7 @@ function renderGameBoard() {
         }
     }
     
-    // Render player
+    // Render player (always in viewport)
     const playerCell = document.querySelector(`.cell[data-x="${gameState.player.x}"][data-y="${gameState.player.y}"]`);
     if (playerCell) {
         playerCell.classList.add('player');
